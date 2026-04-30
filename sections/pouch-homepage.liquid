@@ -153,11 +153,63 @@
     margin-inline: auto;
   }
 
+  .pouch-hero__logo {
+    position: absolute;
+    top: 3.2rem;
+    left: 1.6rem;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 400;
+    font-size: clamp(4.6rem, 6vw, 7.8rem);
+    line-height: 0.82;
+    letter-spacing: -0.06em;
+  }
 
+  .pouch-hero__topbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.9rem 1.4rem 1.1rem;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: var(--font-mono, monospace);
+    letter-spacing: 0.08em;
+    font-size: 1.05rem;
+    background: rgba(16, 20, 42, 0.55);
+    backdrop-filter: blur(14px);
+  }
 
+  .pouch-hero__icons {
+    position: absolute;
+    top: 3.7rem;
+    right: 1.4rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 1.9rem;
+    font-family: var(--font-mono, monospace);
+    font-size: 1.4rem;
+    letter-spacing: 0.12em;
+  }
 
+  .pouch-hero__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.8rem;
+    height: 2.8rem;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    padding: 0;
+  }
 
-
+  .pouch-hero__icon svg {
+    width: 2.2rem;
+    height: 2.2rem;
+  }
 
   .pouch-hero__content {
     display: grid;
@@ -640,9 +692,39 @@
 </style>
 
 <section class="pouch-homepage">
+  <header class="pouch-hero">
+    <div class="pouch-hero__topbar" aria-hidden="true">
+      <span>Free shipping on orders over $100</span>
+      <span>Mother’s Day Offer on SkinRevive+ • Use code REVIVE15</span>
+    </div>
+
+    <div class="pouch-hero__inner">
+      <div class="pouch-hero__logo">POUCH</div>
+
+      <div class="pouch-hero__icons" aria-label="Header actions">
+        <a href="{{ routes.search_url }}" class="pouch-hero__icon" aria-label="Search">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.5"></circle>
+            <path d="M16.25 16.25L21 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+          </svg>
+        </a>
+        <button
+          class="pouch-hero__icon"
+          type="button"
+          aria-label="Open menu"
+          onclick="document.documentElement.classList.toggle('pouch-menu-open')"
+        >
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 6.5H20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+            <path d="M4 12H20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+            <path d="M4 17.5H20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+          </svg>
+        </button>
+        <a href="{{ routes.cart_url }}" class="pouch-hero__icon" aria-label="Cart"> [{{ cart.item_count }}] </a>
+      </div>
+
       <div class="pouch-hero__content">
-        <p class="pouch-eyebrow">{{ section.settings.hero_eyebrow }}</p>
-        <h1 class="pouch-hero__title">{{ section.settings.hero_title }}</h1>
+        <h1 class="pouch-hero__heading">Welcome to Progress</h1>
         <p class="pouch-hero__lede">Powered by IV-inspired formulas, crafted for high-performers who demand more.</p>
         <div class="pouch-hero__actions">
           <a class="pouch-link" href="{{ collections['products'].url | default: routes.all_products_collection_url }}">
@@ -654,76 +736,181 @@
 
       <p class="pouch-hero__label">Drinkable iv formula™</p>
     </div>
-  </div>
+  </header>
 
   <section class="pouch-section pouch-section--light">
-    <div class="pouch-container">
+    <div class="pouch-container pouch-products">
       <div class="pouch-products__intro">
-        <p class="pouch-eyebrow">{{ section.settings.product_eyebrow }}</p>
-        <h2 class="pouch-title" style="font-size: clamp(4rem, 5vw, 7.5rem);">{{ section.settings.product_title }}</h2>
+        <p class="pouch-eyebrow">01 / Our formulas</p>
+        <h2 class="pouch-title" style="font-size: clamp(4rem, 5vw, 7.5rem);">Shop by solution</h2>
         <p class="pouch-copy">
-          {{ section.settings.product_copy }}
+          Wellness that adapts to you. Each POUCH formula delivers targeted support for hydration, immunity, skin
+          health, and complete wellness so you can choose what your body needs, when it needs it.
         </p>
       </div>
+
       <div class="pouch-products__grid">
-        {%- for block in section.blocks -%}
-          {%- if block.type == 'product' -%}
-            {%- assign card_product = block.settings.product -%}
-            <article class="pouch-product-card" {{ block.shopify_attributes }}>
-              <a class="pouch-card-link" href="{{ card_product.url | default: '#' }}">
-                <div class="pouch-product-card__media">
-                  {%- if card_product.featured_image != blank -%}
-                    {{
-                      card_product.featured_image
-                      | image_url: width: 900
-                      | image_tag: loading: 'lazy', class: 'image-cover', alt: card_product.title
-                    }}
-                  {%- else -%}
-                    {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
-                  {%- endif -%}
-                </div>
-                <div class="pouch-product-card__body">
-                  <p class="pouch-eyebrow" style="margin-bottom: 0;">{{ block.settings.number }}</p>
-                  <div class="pouch-product-card__line">
-                    <div>
-                      <h3 class="pouch-product-card__name">{{ card_product.title | default: 'Product Title' }}</h3>
-                      <p class="pouch-product-card__tagline">{{ card_product.metafields.custom.tagline | default: 'Premium Wellness Formula' }}</p>
-                    </div>
-                    <div class="pouch-product-card__size">
-                      {%- if card_product.variants.first.title != 'Default Title' -%}
-                        {{ card_product.variants.first.title }}
-                      {%- else -%}
-                        8.0 oz
-                      {%- endif -%}
-                    </div>
-                  </div>
-                  <div class="pouch-product-card__meta">
-                    {%- for tag in card_product.tags limit: 2 -%}
-                      <span>{{ tag | upcase }}</span>
-                    {%- endfor -%}
-                  </div>
-                  <p class="pouch-product-card__ingredients">
-                    {%- if card_product.metafields.custom.ingredients != blank -%}
-                      {{ card_product.metafields.custom.ingredients }}
-                    {%- else -%}
-                      Aquamin™ / Essential Electrolytes / Vitamin C /
-                    {%- endif -%}
-                  </p>
-                </div>
-              </a>
-              {%- if card_product != blank and card_product.selected_or_first_available_variant != blank -%}
-                <div class="pouch-product-card__footer">
-                  {%- form 'product', card_product, class: 'product-form' -%}
-                    <input type="hidden" name="id" value="{{ card_product.selected_or_first_available_variant.id }}">
-                    <button type="submit" class="button button--secondary button--block pouch-product-card__button">
-                      Add to cart
-                    </button>
-                  {%- endform -%}
-                </div>
+        <article class="pouch-product-card">
+          {%- assign card_product = all_products.immunity -%}
+          <a class="pouch-card-link" href="{{ card_product.url | default: '/products/immunity.html' }}">
+            <div class="pouch-product-card__media">
+              {%- if card_product.featured_image != blank -%}
+                {{
+                  card_product.featured_image
+                  | image_url: width: 900
+                  | image_tag: loading: 'lazy', class: 'image-cover', alt: card_product.title
+                }}
+              {%- else -%}
+                {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
               {%- endif -%}
-            </article>
+            </div>
+            <div class="pouch-product-card__body">
+              <p class="pouch-eyebrow" style="margin-bottom: 0;">Raspberry Ginger</p>
+              <div class="pouch-product-card__line">
+                <div>
+                  <h3 class="pouch-product-card__name">Immunity+</h3>
+                  <p class="pouch-product-card__tagline">Strengthen, Defend, Thrive</p>
+                </div>
+                <div class="pouch-product-card__size">8.0 oz</div>
+              </div>
+              <div class="pouch-product-card__meta"><span>0G Sugar</span><span>5 CALORIES</span></div>
+              <p class="pouch-product-card__ingredients">
+                VitAlign® / Magnesium / Vitamin C / Glutathione / Zinc / B-Complex Vitamins / Selenium / Vitamin D3 /
+              </p>
+            </div>
+          </a>
+          {%- if card_product != blank and card_product.selected_or_first_available_variant != blank -%}
+            <div class="pouch-product-card__footer">
+              {%- form 'product', card_product, class: 'product-form' -%}
+                <input type="hidden" name="id" value="{{ card_product.selected_or_first_available_variant.id }}">
+                <button type="submit" class="button button--secondary button--block pouch-product-card__button">
+                  Add to cart
+                </button>
+              {%- endform -%}
+            </div>
           {%- endif -%}
-        {%- endfor -%}
+        </article>
+
+        <article class="pouch-product-card">
+          {%- assign card_product = all_products.hydration -%}
+          <a class="pouch-card-link" href="{{ card_product.url | default: '/products/hydration.html' }}">
+            <div class="pouch-product-card__media">
+              {%- if card_product.featured_image != blank -%}
+                {{
+                  card_product.featured_image
+                  | image_url: width: 900
+                  | image_tag: loading: 'lazy', class: 'image-cover', alt: card_product.title
+                }}
+              {%- else -%}
+                {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+            </div>
+            <div class="pouch-product-card__body">
+              <p class="pouch-eyebrow" style="margin-bottom: 0;">Lemon</p>
+              <div class="pouch-product-card__line">
+                <div>
+                  <h3 class="pouch-product-card__name">Hydration+</h3>
+                  <p class="pouch-product-card__tagline">Cellular Replenishment Formula</p>
+                </div>
+                <div class="pouch-product-card__size">8.0 oz</div>
+              </div>
+              <div class="pouch-product-card__meta"><span>0G Sugar</span><span>5 CALORIES</span></div>
+              <p class="pouch-product-card__ingredients">Aquamin™ / Essential Electrolytes / Vitamin C /</p>
+            </div>
+          </a>
+          {%- if card_product != blank and card_product.selected_or_first_available_variant != blank -%}
+            <div class="pouch-product-card__footer">
+              {%- form 'product', card_product, class: 'product-form' -%}
+                <input type="hidden" name="id" value="{{ card_product.selected_or_first_available_variant.id }}">
+                <button type="submit" class="button button--secondary button--block pouch-product-card__button">
+                  Add to cart
+                </button>
+              {%- endform -%}
+            </div>
+          {%- endif -%}
+        </article>
+
+        <article class="pouch-product-card">
+          {%- assign card_product = all_products.skinrevive -%}
+          <a class="pouch-card-link" href="{{ card_product.url | default: '/products/skinrevive.html' }}">
+            <div class="pouch-product-card__media">
+              {%- if card_product.featured_image != blank -%}
+                {{
+                  card_product.featured_image
+                  | image_url: width: 900
+                  | image_tag: loading: 'lazy', class: 'image-cover', alt: card_product.title
+                }}
+              {%- else -%}
+                {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+            </div>
+            <div class="pouch-product-card__body">
+              <p class="pouch-eyebrow" style="margin-bottom: 0;">Peach Chamomile</p>
+              <div class="pouch-product-card__line">
+                <div>
+                  <h3 class="pouch-product-card__name">SkinRevive+</h3>
+                  <p class="pouch-product-card__tagline">Complexion Care Formula</p>
+                </div>
+                <div class="pouch-product-card__size">8.0 oz</div>
+              </div>
+              <div class="pouch-product-card__meta"><span>0G Sugar</span><span>5 CALORIES</span></div>
+              <p class="pouch-product-card__ingredients">
+                Hyaluronic Acid / Glutathione / Vitamin E / Magnesium / Vitamin C / B-Complex Vitamins /
+              </p>
+            </div>
+          </a>
+          {%- if card_product != blank and card_product.selected_or_first_available_variant != blank -%}
+            <div class="pouch-product-card__footer">
+              {%- form 'product', card_product, class: 'product-form' -%}
+                <input type="hidden" name="id" value="{{ card_product.selected_or_first_available_variant.id }}">
+                <button type="submit" class="button button--secondary button--block pouch-product-card__button">
+                  Add to cart
+                </button>
+              {%- endform -%}
+            </div>
+          {%- endif -%}
+        </article>
+
+        <article class="pouch-product-card">
+          {%- assign card_product = all_products.welldrip -%}
+          <a class="pouch-card-link" href="{{ card_product.url | default: '/products/welldrip.html' }}">
+            <div class="pouch-product-card__media">
+              {%- if card_product.featured_image != blank -%}
+                {{
+                  card_product.featured_image
+                  | image_url: width: 900
+                  | image_tag: loading: 'lazy', class: 'image-cover', alt: card_product.title
+                }}
+              {%- else -%}
+                {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+            </div>
+            <div class="pouch-product-card__body">
+              <p class="pouch-eyebrow" style="margin-bottom: 0;">Orange Honey</p>
+              <div class="pouch-product-card__line">
+                <div>
+                  <h3 class="pouch-product-card__name">WellDrip+</h3>
+                  <p class="pouch-product-card__tagline">All-in-One Wellness Formula</p>
+                </div>
+                <div class="pouch-product-card__size">8.0 oz</div>
+              </div>
+              <div class="pouch-product-card__meta"><span>0G Sugar</span><span>5 CALORIES</span></div>
+              <p class="pouch-product-card__ingredients">
+                Vitamin C / Glutathione / Selenium / Magnesium / B-Complex Vitamins / Zinc /
+              </p>
+            </div>
+          </a>
+          {%- if card_product != blank and card_product.selected_or_first_available_variant != blank -%}
+            <div class="pouch-product-card__footer">
+              {%- form 'product', card_product, class: 'product-form' -%}
+                <input type="hidden" name="id" value="{{ card_product.selected_or_first_available_variant.id }}">
+                <button type="submit" class="button button--secondary button--block pouch-product-card__button">
+                  Add to cart
+                </button>
+              {%- endform -%}
+            </div>
+          {%- endif -%}
+        </article>
       </div>
     </div>
   </section>
@@ -732,67 +919,88 @@
     <div class="pouch-container pouch-story">
       <div class="pouch-story__grid">
         <div class="pouch-story__lead">
-          <p class="pouch-eyebrow">{{ section.settings.story_eyebrow }}</p>
+          <p class="pouch-eyebrow">02 / why we exist</p>
           <h2 class="pouch-title" style="font-size: clamp(4.8rem, 6.5vw, 9.2rem);">
-            {{ section.settings.story_title }}
+            We exist to keep you at your peak, reimagining IV therapy into a portable drink that fuels performance,
+            supports recovery, and keeps you sharp. Every day.
           </h2>
         </div>
         <div class="pouch-story__support">
           <p class="pouch-copy" style="max-width: 44rem;">
-            {{ section.settings.story_copy }}
+            Science-backed fluids. Real-world performance. Find out how we keep you operating at your peak.
           </p>
-          <a class="pouch-link" href="{{ section.settings.story_link_url | default: '#' }}"
-            >{{ section.settings.story_link_text }} <span class="pouch-link__arrow" aria-hidden="true"></span
+          <a class="pouch-link" href="/pages/about-us.html"
+            >Discover our approach <span class="pouch-link__arrow" aria-hidden="true"></span
           ></a>
         </div>
       </div>
 
       <div class="pouch-science">
         <div class="pouch-science__copy">
-          <p class="pouch-eyebrow">{{ section.settings.science_eyebrow }}</p>
-          <h2 class="pouch-title" style="font-size: clamp(4.2rem, 5vw, 7.6rem);">{{ section.settings.science_title }}</h2>
+          <p class="pouch-eyebrow">03 / The science</p>
+          <h2 class="pouch-title" style="font-size: clamp(4.2rem, 5vw, 7.6rem);">Drinkable IV Formula™</h2>
         </div>
         <div class="pouch-science__stack">
           <div class="pouch-science__row">
-            {%- for block in section.blocks -%}
-              {%- if block.type == 'science_panel' -%}
-                <div class="pouch-science__panel" {{ block.shopify_attributes }}>
-                  <p class="pouch-product-card__name" style="font-size: 2rem;">{{ block.settings.title }}</p>
-                  <p class="pouch-feature__text">
-                    {{ block.settings.text }}
-                  </p>
-                </div>
-              {%- endif -%}
-            {%- endfor -%}
+            <div class="pouch-science__panel">
+              <p class="pouch-product-card__name" style="font-size: 2rem;">IV-Inspired, Everyday Ready</p>
+              <p class="pouch-feature__text">
+                Each POUCH formula mirrors the nutrient profile of popular IV vitamin therapies, delivering hydration,
+                immunity, recovery, and skin health support in a more practical and elegant format.
+              </p>
+            </div>
+            <div class="pouch-science__panel">
+              <p class="pouch-product-card__name" style="font-size: 2rem;">Quality Ingredients, Better Absorption</p>
+              <p class="pouch-feature__text">
+                Every vitamin, mineral, and antioxidant is intentionally selected for its superior bioavailability,
+                ensuring more of what you take in is absorbed and put to work by your body.
+              </p>
+            </div>
+            <div class="pouch-science__panel">
+              <p class="pouch-product-card__name" style="font-size: 2rem;">Targeted Wellness Solutions</p>
+              <p class="pouch-feature__text">
+                Each formula is crafted for a distinct wellness goal, ensuring optimal performance support without
+                making the experience clinical or cumbersome.
+              </p>
+            </div>
+            <div class="pouch-science__panel">
+              <p class="pouch-product-card__name" style="font-size: 2rem;">Advanced Nutrition, Made Accessible</p>
+              <p class="pouch-feature__text">
+                POUCH transforms IV-inspired formulas into portable blends you can sip anywhere, featuring premium
+                ingredients rarely found in drinkable formats.
+              </p>
+            </div>
           </div>
           <div class="pouch-products__grid" style="grid-template-columns: repeat(4, minmax(0, 1fr));">
-            {%- for block in section.blocks -%}
-              {%- if block.type == 'science_product' -%}
-                {%- assign science_product = block.settings.product -%}
-                <article class="pouch-product-card" {{ block.shopify_attributes }}>
-                  <a class="pouch-card-link" href="{{ science_product.url | default: '#' }}">
-                    <div class="pouch-product-card__media">
-                      {%- if science_product.featured_image != blank -%}
-                        {{
-                          science_product.featured_image
-                          | image_url: width: 900
-                          | image_tag: loading: 'lazy', class: 'image-cover', alt: science_product.title
-                        }}
-                      {%- endif -%}
-                    </div>
-                    <div class="pouch-product-card__body">
-                      <p class="pouch-eyebrow" style="margin-bottom: 0;">{{ science_product.title }}</p>
-                      <div class="pouch-product-card__line" style="align-items: start;">
-                        <div>
-                          <h3 class="pouch-product-card__name" style="font-size: 2.2rem;">{{ science_product.title }}</h3>
-                          <p class="pouch-product-card__tagline">{{ block.settings.tagline | default: science_product.metafields.custom.tagline }}</p>
-                        </div>
-                        <div class="pouch-product-card__size">+</div>
+            {%- assign science_cards = 'skinrevive|SkinRevive+|Complexion Care Formula|products/skinrevive.html,immunity|Immunity+|Strengthen, Defend, Thrive|products/immunity.html,hydration|Hydration+|Cellular Replenishment Formula|products/hydration.html,welldrip|WellDrip+|All-in-One Wellness Formula|products/welldrip.html'
+              | split: ','
+            -%}
+            {%- for science_card in science_cards -%}
+              {%- assign science_parts = science_card | split: '|' -%}
+              {%- assign science_product = all_products[science_parts[0]] -%}
+              <article class="pouch-product-card">
+                <a class="pouch-card-link" href="{{ science_product.url | default: science_parts[3] }}">
+                  <div class="pouch-product-card__media">
+                    {%- if science_product.featured_image != blank -%}
+                      {{
+                        science_product.featured_image
+                        | image_url: width: 900
+                        | image_tag: loading: 'lazy', class: 'image-cover', alt: science_product.title
+                      }}
+                    {%- endif -%}
+                  </div>
+                  <div class="pouch-product-card__body">
+                    <p class="pouch-eyebrow" style="margin-bottom: 0;">{{ science_parts[1] }}</p>
+                    <div class="pouch-product-card__line" style="align-items: start;">
+                      <div>
+                        <h3 class="pouch-product-card__name" style="font-size: 2.2rem;">{{ science_parts[1] }}</h3>
+                        <p class="pouch-product-card__tagline">{{ science_parts[2] }}</p>
                       </div>
+                      <div class="pouch-product-card__size">+</div>
                     </div>
-                  </a>
-                </article>
-              {%- endif -%}
+                  </div>
+                </a>
+              </article>
             {%- endfor -%}
           </div>
         </div>
@@ -802,65 +1010,43 @@
 
   <section class="pouch-section pouch-section--light">
     <div class="pouch-container pouch-sip-vs-drip">
-      <p class="pouch-eyebrow">{{ section.settings.medical_eyebrow }}</p>
+      <p class="pouch-eyebrow">04 / Medically supported</p>
       <div class="pouch-feature-list">
         <div class="pouch-feature">
           <p class="pouch-feature__title">All formulas are:</p>
           <p class="pouch-feature__text">
-            {%- for block in section.blocks -%}
-              {%- if block.type == 'medical_feature' -%}
-                {{ block.settings.text }}<br>
-              {%- endif -%}
-            {%- endfor -%}
+            01 / non-gmo<br>
+            02 / gluten free<br>
+            03 / vegan<br>
+            04 / zero sugar<br>
+            05 / no artificial sweeteners
           </p>
         </div>
         <div class="pouch-feature">
-          {%- for block in section.blocks -%}
-            {%- if block.type == 'medical_quote' -%}
-              <p class="pouch-feature__title" {{ block.shopify_attributes }}>{{ block.settings.author }}</p>
-              <p class="pouch-feature__text">
-                {{ block.settings.quote }}
-              </p>
-            {%- endif -%}
-          {%- endfor -%}
+          <p class="pouch-feature__title">Brooke Aaron, MS, RDN, LDN</p>
+          <p class="pouch-feature__text">
+            “POUCH reimagines the benefits of IV therapy in an oral, fast-absorbing format. It delivers highly
+            bioavailable nutrients that fuel cellular health, support hydration, and enhance cognitive performance.”
+          </p>
         </div>
       </div>
-      <a class="pouch-link" href="{{ section.settings.medical_link_url | default: '#' }}"
-        >{{ section.settings.medical_link_text }} <span class="pouch-link__arrow" aria-hidden="true"></span
+      <a class="pouch-link" href="{{ collections['products'].url | default: routes.all_products_collection_url }}"
+        >Explore our formulas <span class="pouch-link__arrow" aria-hidden="true"></span
       ></a>
 
       <div class="pouch-compare">
         <div>
-          <p class="pouch-eyebrow" style="margin-bottom: 0.7rem;">{{ section.settings.variety_eyebrow }}</p>
-          <h2 class="pouch-title" style="font-size: clamp(4rem, 4.7vw, 7rem);">{{ section.settings.variety_title }}</h2>
+          <p class="pouch-eyebrow" style="margin-bottom: 0.7rem;">06 / VarietyPack+</p>
+          <h2 class="pouch-title" style="font-size: clamp(4rem, 4.7vw, 7rem);">One pack. Every formula.</h2>
           <p class="pouch-copy">
-            {{ section.settings.variety_copy }}
+            Twelve pouches. Four targeted blends. Your complete supply of hydration, immune support, skin nourishment,
+            and total-body wellness.
           </p>
         </div>
         <div class="pouch-compare__grid">
-          <div class="pouch-compare__head">Features</div>
-          <div class="pouch-compare__head">Sip (POUCH)</div>
-          <div class="pouch-compare__head">Drip (IV)</div>
-
-          <div class="pouch-compare__cell">Portability</div>
-          <div class="pouch-compare__cell">Your pocket / Gym bag</div>
-          <div class="pouch-compare__cell">Clinic / IV Pole</div>
-
-          <div class="pouch-compare__cell">Cost</div>
-          <div class="pouch-compare__cell">~$2.50 per serving</div>
-          <div class="pouch-compare__cell">$150 - $400+ per session</div>
-
-          <div class="pouch-compare__cell">Experience</div>
-          <div class="pouch-compare__cell">Refreshing & delicious</div>
-          <div class="pouch-compare__cell">Invasive / Needle-based</div>
-
-          <div class="pouch-compare__cell">Time Commitment</div>
-          <div class="pouch-compare__cell">Instantly available</div>
-          <div class="pouch-compare__cell">45 - 60 minutes</div>
-
-          <div class="pouch-compare__cell">Ingredients</div>
-          <div class="pouch-compare__cell">Bio-available minerals</div>
-          <div class="pouch-compare__cell">Saline + Lab Vitamins</div>
+          <div class="pouch-compare__head">Formulas</div>
+          <div class="pouch-compare__head">Sip</div>
+          <div class="pouch-compare__head">Drip</div>
         </div>
         <p class="pouch-compare__note">
           *POUCH is a dietary supplement, not a medical treatment. Use as directed or as advised by a healthcare
@@ -869,24 +1055,45 @@
       </div>
 
       <div class="pouch-faqs">
-        <p class="pouch-eyebrow">{{ section.settings.faq_eyebrow }}</p>
-        {%- for block in section.blocks -%}
-          {%- if block.type == 'faq' -%}
-            <details class="pouch-faq" {% if forloop.first %}open{% endif %} {{ block.shopify_attributes }}>
-              <summary>{{ block.settings.question }} <span class="pouch-faq__plus">+</span></summary>
-              <div class="pouch-faq__content">
-                {{ block.settings.answer }}
-              </div>
-            </details>
-          {%- endif -%}
-        {%- endfor -%}
+        <p class="pouch-eyebrow">08 / FAQs</p>
+        <details class="pouch-faq" open>
+          <summary>How often can I drink POUCH products? <span class="pouch-faq__plus">+</span></summary>
+          <div class="pouch-faq__content">
+            Frequency of use depends on your needs and goals: WellDrip+, SkinRevive+, and Immunity+: we recommend one
+            POUCH daily, or as directed by your healthcare professional. Hydration+: 1–2 pouches daily, or as desired.
+            This formula can be enjoyed anytime, but is especially effective after exercise or heat exposure.
+          </div>
+        </details>
+        <details class="pouch-faq">
+          <summary>Do POUCH products need to be refrigerated? <span class="pouch-faq__plus">+</span></summary>
+          <div class="pouch-faq__content">
+            No. POUCH products are shelf-stable and built to move with you, from gym bag to suitcase to desk drawer.
+            While refrigeration isn’t required, we recommend enjoying them chilled for the best taste experience.
+          </div>
+        </details>
+        <details class="pouch-faq">
+          <summary>Are POUCH formulas third-party tested? <span class="pouch-faq__plus">+</span></summary>
+          <div class="pouch-faq__content">
+            Yes. All POUCH formulas are third-party tested for nutritional content and label accuracy, heavy metals, and
+            shelf life.
+          </div>
+        </details>
+        <details class="pouch-faq">
+          <summary>How can a drinkable product compare to IV therapy? <span class="pouch-faq__plus">+</span></summary>
+          <div class="pouch-faq__content">
+            IV therapy is effective because it bypasses digestion and delivers nutrients directly into the bloodstream.
+            POUCH is IV-inspired in that each formula mirrors the nutrient profile of IV vitamin therapies, uses highly
+            bioavailable ingredients, and supports immunity, recovery, skin health, and performance in a practical,
+            daily format.
+          </div>
+        </details>
       </div>
     </div>
   </section>
 
   <section class="pouch-section">
     <div class="pouch-container pouch-articles">
-      <p class="pouch-eyebrow">{{ section.settings.blog_eyebrow }}</p>
+      <p class="pouch-eyebrow">09 / Pouch 101</p>
       <div class="pouch-articles__grid">
         {%- if pouch_blog != blank and pouch_blog.articles['benefits-drinkable-iv-therapy'] != blank -%}
           {%- assign article_one = pouch_blog.articles['benefits-drinkable-iv-therapy'] -%}
@@ -931,276 +1138,10 @@
   "name": "POUCH homepage",
   "tag": "section",
   "class": "section",
-  "settings": [
-    {
-      "type": "header",
-      "content": "Colors"
-    },
-    {
-      "type": "color",
-      "id": "color_navy",
-      "label": "Navy",
-      "default": "#10142a"
-    },
-    {
-      "type": "color",
-      "id": "color_blue",
-      "label": "Blue",
-      "default": "#233a72"
-    },
-    {
-      "type": "color",
-      "id": "color_cream",
-      "label": "Cream",
-      "default": "#f4efe8"
-    },
-    {
-      "type": "header",
-      "content": "Hero"
-    },
-    {
-      "type": "text",
-      "id": "hero_eyebrow",
-      "label": "Hero Eyebrow",
-      "default": "IV Therapy. Reimagined."
-    },
-    {
-      "type": "text",
-      "id": "hero_title",
-      "label": "Hero Title",
-      "default": "POUCH"
-    },
-    {
-      "type": "header",
-      "content": "Story Section"
-    },
-    {
-      "type": "text",
-      "id": "story_eyebrow",
-      "label": "Story Eyebrow",
-      "default": "02 / why we exist"
-    },
-    {
-      "type": "textarea",
-      "id": "story_title",
-      "label": "Story Title",
-      "default": "We exist to keep you at your peak, reimagining IV therapy into a portable drink that fuels performance, supports recovery, and keeps you sharp. Every day."
-    },
-    {
-      "type": "textarea",
-      "id": "story_copy",
-      "label": "Story Copy",
-      "default": "Science-backed fluids. Real-world performance. Find out how we keep you operating at your peak."
-    },
-    {
-      "type": "text",
-      "id": "story_link_text",
-      "label": "Story Link Text",
-      "default": "Discover our approach"
-    },
-    {
-      "type": "url",
-      "id": "story_link_url",
-      "label": "Story Link URL"
-    },
-    {
-      "type": "header",
-      "content": "Science Section"
-    },
-    {
-      "type": "text",
-      "id": "science_eyebrow",
-      "label": "Science Eyebrow",
-      "default": "03 / The science"
-    },
-    {
-      "type": "text",
-      "id": "science_title",
-      "label": "Science Title",
-      "default": "Drinkable IV Formula™"
-    },
-    {
-      "type": "header",
-      "content": "Medical Section"
-    },
-    {
-      "type": "text",
-      "id": "medical_eyebrow",
-      "label": "Medical Eyebrow",
-      "default": "04 / Medically supported"
-    },
-    {
-      "type": "text",
-      "id": "medical_link_text",
-      "label": "Medical Link Text",
-      "default": "Explore our formulas"
-    },
-    {
-      "type": "url",
-      "id": "medical_link_url",
-      "label": "Medical Link URL"
-    },
-    {
-      "type": "header",
-      "content": "Variety Pack Section"
-    },
-    {
-      "type": "text",
-      "id": "variety_eyebrow",
-      "label": "Variety Eyebrow",
-      "default": "06 / VarietyPack+"
-    },
-    {
-      "type": "text",
-      "id": "variety_title",
-      "label": "Variety Title",
-      "default": "One pack. Every formula."
-    },
-    {
-      "type": "textarea",
-      "id": "variety_copy",
-      "label": "Variety Copy",
-      "default": "Twelve pouches. Four targeted blends. Your complete supply of hydration, immune support, skin nourishment, and total-body wellness."
-    },
-    {
-      "type": "header",
-      "content": "FAQ Section"
-    },
-    {
-      "type": "text",
-      "id": "faq_eyebrow",
-      "label": "FAQ Eyebrow",
-      "default": "08 / FAQs"
-    },
-    {
-      "type": "header",
-      "content": "Blog Section"
-    },
-    {
-      "type": "text",
-      "id": "blog_eyebrow",
-      "label": "Blog Eyebrow",
-      "default": "09 / Pouch 101"
-    }
-  ],
-  "blocks": [
-    {
-      "type": "product",
-      "name": "Featured Product",
-      "limit": 3,
-      "settings": [
-        {
-          "type": "product",
-          "id": "product",
-          "label": "Product"
-        },
-        {
-          "type": "text",
-          "id": "number",
-          "label": "Index (e.g. 01)",
-          "default": "01"
-        }
-      ]
-    },
-    {
-      "type": "science_panel",
-      "name": "Science Panel",
-      "limit": 4,
-      "settings": [
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Title",
-          "default": "Cellular"
-        },
-        {
-          "type": "textarea",
-          "id": "text",
-          "label": "Text",
-          "default": "Bio-available minerals for rapid replenishment."
-        }
-      ]
-    },
-    {
-      "type": "science_product",
-      "name": "Science Product",
-      "limit": 4,
-      "settings": [
-        {
-          "type": "product",
-          "id": "product",
-          "label": "Product"
-        },
-        {
-          "type": "text",
-          "id": "tagline",
-          "label": "Custom Tagline (Optional)"
-        }
-      ]
-    },
-    {
-      "type": "medical_feature",
-      "name": "Medical Feature",
-      "limit": 10,
-      "settings": [
-        {
-          "type": "text",
-          "id": "text",
-          "label": "Feature Text",
-          "default": "01 / non-gmo"
-        }
-      ]
-    },
-    {
-      "type": "medical_quote",
-      "name": "Medical Quote",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "text",
-          "id": "author",
-          "label": "Author",
-          "default": "Brooke Aaron, MS, RDN, LDN"
-        },
-        {
-          "type": "textarea",
-          "id": "quote",
-          "label": "Quote",
-          "default": "“POUCH reimagines the benefits of IV therapy in an oral, fast-absorbing format.”"
-        }
-      ]
-    },
-    {
-      "type": "faq",
-      "name": "FAQ",
-      "settings": [
-        {
-          "type": "text",
-          "id": "question",
-          "label": "Question",
-          "default": "How do I use POUCH?"
-        },
-        {
-          "type": "textarea",
-          "id": "answer",
-          "label": "Answer",
-          "default": "Simply mix one pouch with 16oz of water and enjoy."
-        }
-      ]
-    }
-  ],
+  "settings": [],
   "presets": [
     {
-      "name": "POUCH homepage",
-      "blocks": [
-        { "type": "product" },
-        { "type": "product" },
-        { "type": "product" },
-        { "type": "science_panel" },
-        { "type": "science_panel" },
-        { "type": "science_panel" },
-        { "type": "science_panel" }
-      ]
+      "name": "POUCH homepage"
     }
   ]
 }
